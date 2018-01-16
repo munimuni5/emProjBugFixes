@@ -1,0 +1,73 @@
+<div class="bubble text-center">Search Yelp for restaurants! Then add it to our database, and save it to your favorites!</div>
+<div class="yelpsearchdiv">
+  <form class="form" action="/pages/searchresults" method="post">
+    <div class="row">
+      <div class="form-group col-md-6 col-sm-offset-3">
+        <input type="text" class="form-control input-lg text-center" name="searchbox" placeholder="Search for a restaurant">
+      </div>
+      <div class="form-group col-md-6 col-sm-offset-3">
+        <input type="text" class="form-control input-lg text-center" name="location" placeholder="City of interest">
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-6 col-sm-offset-3">
+        <input type="submit" value="Search Yelp" class="btn btn-primary btn-lg btn-block">
+      </div>
+    </div>
+
+  </form>
+</div>
+<div class="row">
+  <div class="content-main">
+    <span>
+      <div class="row">
+        <div id="columns">
+          <% if (businesses) { %>
+          <% for (var item of businesses) { %>
+            <h2 class="business-name"><%= item.name %></h2>
+
+              <img class="rest-image-result" src="<%= item.image_url%>">
+              <div class="restaurant-content-result"> <%= item.rating %>
+                <%= item.price %>
+                <%= item.display_phone %>
+                <%= item.location.address1 %>
+              </div>
+
+              <form method="POST" action="/pages/favorites">
+                <input hidden type="text" name="userId" value="<%= currentUser.id %>">
+                <input hidden type="text" name="name" value="<%= item.name %>">
+                <input hidden type="text" name="id" value="<%= item.id %>">
+                <input hidden type="text" name="image_url" value="<%= item.image_url %>">
+                <input hidden type="text" name="opinion" value="love">
+
+                <button class="btn btn-primary" type="submit">Add to Favorites</button>
+              </form>
+
+
+              <form method="POST" action="/pages/next">
+                <input hidden type="text" name="userId" value="<%= currentUser.id %>">
+                <input hidden type="text" name="name" value="<%= item.name %>">
+                <input hidden type="text" name="id" value="<%= item.id %>">
+                <input hidden type="text" name="image_url" value="<%= item.image_url %>">
+                <input hidden type="text" name="opinion" value="next">
+
+                <button class="btn btn-success" type="submit">Up Next</button>
+              </form>
+
+
+              <form method="POST" action="/pages/neverAgain">
+                <input hidden type="text" name="name" value="<%= item.name %>">
+                <input hidden type="text" name="userId" value="<%= currentUser.id %>">
+                <input hidden type="text" name="id" value="<%= item.id %>">
+                <input hidden type="text" name="image_url" value="<%= item.image_url %>">
+                <input hidden type="text" name="opinion" value="dislike">
+                <button class="btn btn-danger" type="submit">Dislike</button>
+              </form>
+
+            <% }; %>
+            <% } %>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
